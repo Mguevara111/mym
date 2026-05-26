@@ -252,16 +252,16 @@ button{
 }
 .hero__cards--show{
   visibility: visible;
-  opacity: 1;
+  
   transition: visibility 4s linear,opacity 4s;
   animation: movecatalog 4s linear forwards;
 }
 @keyframes movecatalog{
   from{
-    top:74%
+    opacity: 0;
   }
   to{
-    top:75%
+    opacity: 1;
   }
 }
 .hero__carditem{
@@ -496,4 +496,7 @@ button{
   height: 30px;
   fill:black;
   cursor: pointer;
+}
+.footer__socialmedia p{
+  text-align: center;
 }

@@ -1,13 +1,28 @@
 import './style.css'
 
-interface Product{
-  id:number,
-  name:string,
-  price:number,
-  published:boolean,
-  description:string,
-  category:string,
-  imageurl:string
+interface Product {
+  id?: string | number;
+  name?: string | number;
+  price?: string | number;
+  published?: string | number;
+  description?: string | number;
+  category?: string | number;
+  imageurl?: string | number;
+}
+
+
+interface Celda {
+  v?: string | number;
+}
+
+interface Fila {
+  c: Celda[];
+}
+
+interface GoogleSheetJSON {
+  table: {
+    rows: Fila[];
+  };
 }
 
 let $movilmenu=document.querySelector('.header__phonemenu')
@@ -28,7 +43,7 @@ const cleanbaseformdrive=async ()=>{
         const finJson = textoPlano.lastIndexOf('}') + 1;
         const jsonLimpio = textoPlano.substring(inicioJson, finJson);
         //console.log(jsonLimpio)
-        const datos = JSON.parse(jsonLimpio);
+        const datos: GoogleSheetJSON = JSON.parse(jsonLimpio);
         
         // Aquí adentro Google Sheets esconde las filas de tu Excel
         const filas = datos.table.rows;
@@ -73,7 +88,7 @@ const generateproducts=(base:Product[],category:string):string=>{
 
 
 const loadproducts=async ()=>{
-  let base=await cleanbaseformdrive()
+  let base:Product[]=await cleanbaseformdrive()
   let categoriesraw=base.map(el=>el.category)
   let cat=new Set(categoriesraw)
   let categories=Array.from(cat).sort()
