@@ -59,11 +59,10 @@ const generateproducts=(base:Product[],category:string):string=>{
               if(el.published){
                 if(el.category === category){
                   return `<div class='catalog__item'>
+                          <img src=${el.imageurl} alt=${el.name}>
                           <h3>${el.name}</h3>
-                          <img src="" alt="">
-                          <p>${el.description}</p>
                           <p><b>Precio:</b>$${el.price}</p>
-                          <button class="button">Pedir</button>
+                          <a class="button round" href="https://wa.me/593998636447?text=Hola%20necesito%20información%20sobre%20${el.name}" target="_blank">Pedir</a>
                           </div>`
                 }
               }
