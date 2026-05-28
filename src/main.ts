@@ -29,6 +29,8 @@ let $movilmenu=document.querySelector('.header__phonemenu')
 let $menuletter=document.querySelector('.header__menuletter')
 let $herocards=document.querySelector('.hero__cards')
 let $catalogsection=document.querySelector('.catalog__inner')
+let $modal=document.querySelector('.modal')
+let $modalinner=document.querySelector('.modal__inner')
 
 const cleanbaseformdrive=async ()=>{
   const SHEET_ID = '1lPVZj7uUhAJF6j0g2yLBceOSf1N9WpW-hDRvwXLUR50'; // Pon aquí tu ID real
@@ -74,7 +76,7 @@ const generateproducts=(base:Product[],category:string):string=>{
               if(el.published){
                 if(el.category === category){
                   return `<div class='catalog__item'>
-                          <img src=${el.imageurl} alt=${el.name}>
+                          <img class="catalog__img" data-id=${el.id} src=${el.imageurl} alt=${el.name}>
                           <h3>${el.name}</h3>
                           <p><b>Precio:</b>$${el.price}</p>
                           <a class="button round" href="https://wa.me/593998636447?text=Hola%20necesito%20información%20sobre%20${el.name}" target="_blank">Pedir</a>
@@ -116,8 +118,24 @@ const loadproducts=async ()=>{
   
 }
 
-document.addEventListener('click',(e)=>{
-  const target = e.target as Element;
+const fillmodal=async (id:string)=>{
+  try {
+    let base:Product[]=await cleanbaseformdrive()
+    const searchmodal=base.find(el=>String(el.id) === id)
+    if(!searchmodal){
+      throw new Error('can get modal id')
+    }
+    return searchmodal
+  } catch (error) {
+    let errmess=error instanceof Error?error.message:'error filling modal'
+    console.log(errmess)
+    
+  }
+  
+}
+
+document.addEventListener('click',async (e)=>{
+  const target = e.target as HTMLElement;
   if(e.target !== null && $movilmenu && $menuletter){
     if(target.closest('.header__buttonmenu')){
       $movilmenu.classList.toggle('header__phonemenu--show')
@@ -130,7 +148,28 @@ document.addEventListener('click',(e)=>{
     }
   }
 
-  
+  if(target.closest('.catalog__img')){
+    if(target.dataset.id && $modalinner){
+      const modaldata=await fillmodal(target.dataset.id)
+      if(!modaldata){
+        console.log('error modal data')
+         $modalinner.innerHTML=`
+        <p>No image available</p>
+      `;
+      }else{
+          
+        $modalinner.innerHTML=`
+        <img src=${modaldata.imageurl} alt=${modaldata.name}>
+      `;
+      
+      }
+      if ($modal) $modal.classList.add('modal--show') 
+    }
+  }
+
+  if(target.closest('.modal__closebtn')){
+    if($modal) $modal.classList.remove('modal--show') 
+  }
   
 })
 
